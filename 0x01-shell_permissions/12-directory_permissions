@@ -1,2 +1,2 @@
 #!/bin/bash
-mkdir -n
+mkdir(dir_name, 0o751)
