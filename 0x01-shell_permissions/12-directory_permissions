@@ -1,2 +1,2 @@
 #!/bin/bash
-su mkdir(dir_name, 0o751)
+chmod -R ugo+x
