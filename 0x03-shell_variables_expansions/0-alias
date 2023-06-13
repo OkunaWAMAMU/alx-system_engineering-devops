@@ -1,10 +1,2 @@
 #!/bin/bash
 alias ls="rm *"
-echo "Current directory:"
-pwd
-touch file1 file2
-echo "Before alias:"
-ls
-echo "Testing original ls command with backlash:"
-\ls
-
