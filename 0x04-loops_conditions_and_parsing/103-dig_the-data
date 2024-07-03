@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# This script parses Apache log files, counts occurrences of IP and HTTP status codes,
+# and sorts the results by the number of occurrences in descending order.
 
-# Using awk to parse and sort Apache log data
 awk '
 {
     # Extract IP and HTTP status code from each line
@@ -8,15 +9,16 @@ awk '
     http_code = $9
 
     # Count occurrences of each IP + HTTP code combination
-    count[ip, http_code]++
+    count[ip " " http_code]++
 }
 
 END {
     # Iterate over the counts and print in the required format
     for (key in count) {
-        split(key, indices, SUBSEP)
-        ip = indices[1]
-        http_code = indices[2]
-        print count[key], ip, http_code
+        split(key, parts, " ")
+        ip = parts[1]
+        http_code = parts[2]
+        printf "%d %s %s\n", count[key], ip, http_code
     }
-}' apache-access.log | sort -nr   # Sort by occurrence number in descending order
+}' apache-access.log | sort -nrk1,1
+
