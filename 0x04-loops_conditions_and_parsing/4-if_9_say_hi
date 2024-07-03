@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script displays "Best School" 10 times with "Hi" printed after the 9th iteration
+
+# Initialize a counter variable
+counter=1
+
+# Use a while loop to display "Best School" 10 times
+while [ $counter -le 10 ]; do
+    if [ $counter -eq 9 ]; then
+        echo "Best School"
+        echo "Hi"   # Print "Hi" after the 9th iteration
+    else
+        echo "Best School"
+    fi
+    (( counter++ ))  # Increment the counter
+done
+
