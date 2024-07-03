@@ -1,8 +1,22 @@
-#!/usr/bin/env bash
-# Bash script to count occurrences of IP and HTTP status code pairs from Apache access log
+#!/bin/bash
 
-# Use awk to extract IP (1st field) and HTTP status code (9th field)
-# Sort the data and count occurrences with awk and uniq
-# Finally, sort the output by occurrence number in descending order with sort
+# Using awk to parse and sort Apache log data
+awk '
+{
+    # Extract IP and HTTP status code from each line
+    ip = $1
+    http_code = $9
 
-awk '{print $1, $9}' apache-access.log | sort | uniq -c | awk '{print $1, $2, $3}' | sort -nr
+    # Count occurrences of each IP + HTTP code combination
+    count[ip, http_code]++
+}
+
+END {
+    # Iterate over the counts and print in the required format
+    for (key in count) {
+        split(key, indices, SUBSEP)
+        ip = indices[1]
+        http_code = indices[2]
+        print count[key], ip, http_code
+    }
+}' apache-access.log | sort -nr   # Sort by occurrence number in descending order
