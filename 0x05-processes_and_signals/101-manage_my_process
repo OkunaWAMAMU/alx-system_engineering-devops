@@ -1,36 +1,25 @@
 #!/bin/bash
 
-# Function to start the manage_my_process script
-start_process() {
-    ./manage_my_process &
-    echo $! > /var/run/my_process.pid
-    echo "manage_my_process started"
-}
+# Init script to manage manage_my_process
 
-# Function to stop the manage_my_process script
-stop_process() {
-    kill $(cat /var/run/my_process.pid)
-    rm -f /var/run/my_process.pid
-    echo "manage_my_process stopped"
-}
+# Check arguments
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+fi
 
-# Function to restart the manage_my_process script
-restart_process() {
-    stop_process
-    start_process
-    echo "manage_my_process restarted"
-}
+# Path to manage_my_process script
+MANAGE_SCRIPT="./manage_my_process"
 
-# Main script logic
 case "$1" in
     start)
-        start_process
+        sudo $MANAGE_SCRIPT start
         ;;
     stop)
-        stop_process
+        sudo $MANAGE_SCRIPT stop
         ;;
     restart)
-        restart_process
+        sudo $MANAGE_SCRIPT restart
         ;;
     *)
         echo "Usage: $0 {start|stop|restart}"
@@ -39,4 +28,3 @@ case "$1" in
 esac
 
 exit 0
-
