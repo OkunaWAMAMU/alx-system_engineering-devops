@@ -5,7 +5,7 @@ PIDFILE="/var/run/myscript.pid"
 
 # Function to handle cleanup and exit
 cleanup() {
-    echo "Cleaning up and exiting..."
+    echo "I hate the kill command"
     rm -f "$PIDFILE"
     exit 0
 }
