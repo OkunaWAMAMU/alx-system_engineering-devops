@@ -11,10 +11,18 @@ query_subdomain() {
     record=$(dig +short "${full_domain}")
     
     if [ -n "$record" ]; then
-        echo "The subdomain ${subdomain} is an A record and points to ${record}"
+        echo "The subdomain ${subdomain} is an A record and points to ${record}" | awk '{print $0}'
     else
         echo "No record found for subdomain ${subdomain}"
     fi
+}
+
+# Function to display information for default subdomains
+display_default_subdomains() {
+    local domain="$1"
+    for sub in www lb-01 web-01 web-02; do
+        query_subdomain "$domain" "$sub"
+    done
 }
 
 # Main script logic
@@ -24,9 +32,7 @@ main() {
     
     if [ -z "$subdomain" ]; then
         # If no subdomain is provided, query the default subdomains
-        for sub in www lb-01 web-01 web-02; do
-            query_subdomain "$domain" "$sub"
-        done
+        display_default_subdomains "$domain"
     else
         # If a subdomain is provided, query only that subdomain
         query_subdomain "$domain" "$subdomain"
