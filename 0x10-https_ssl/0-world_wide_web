@@ -30,7 +30,7 @@ main() {
     else
         # If a subdomain is provided, query only that subdomain
         query_subdomain "$domain" "$subdomain"
-    }
+    fi
 }
 
 # Check if at least the domain is provided
