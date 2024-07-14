@@ -1,29 +1,35 @@
 #!/usr/bin/env bash
-# This script displays listening ports and shows the PID and name of the program to which each socket belongs
+# This script displays listening ports along with the associated PIDs and program names
 
-# Display active internet connections
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit 1
+fi
+
+# Display active internet connections (only servers)
 echo "Active Internet connections (only servers)"
-echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
-
-# Display TCP and UDP listening sockets with PID/Program name
-ss -tunlp | awk '
-BEGIN { FS="[ \t\n]+"; OFS=" " }
-NR>1 && ($1 ~ /^(tcp|udp)/) && ($4 ~ /LISTEN/) {
-  gsub("users:(\"","users:(", $6)
-  gsub("\")",")", $6)
-  printf "%-4s %5s %5s %-21s %-21s %-10s %-14s\n", $1, $2, $3, $4, $5, $6, $7
+ss -ltnup | awk '
+BEGIN {
+    print "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
+}
+NR > 1 {
+    split($6, a, ",")
+    split(a[2], b, "=")
+    pid_program = b[2]
+    printf "%-4s  %-5s  %-5s  %-20s  %-20s  %-12s  %s\n", $1, $2, $3, $4, $5, $6, pid_program
 }'
 
-# Display active UNIX domain sockets
+# Display active UNIX domain sockets (only servers)
 echo "Active UNIX domain sockets (only servers)"
-echo "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
-
-# Display UNIX domain listening sockets with PID/Program name
-ss -xlnp | awk '
-BEGIN { FS="[ \t\n]+"; OFS=" " }
-NR>1 && ($1 ~ /^(unix|u_str|u_dgr|u_seq)/) && ($4 == "LISTENING") {
-  gsub("users:(\"","users:(", $6)
-  gsub("\")",")", $6)
-  printf "%-4s %5s %-10s %-11s %-11s %-6s %-14s %-30s\n", $1, $2, $3, $4, $5, $6, $7, $8
+ss -lxnp | awk '
+BEGIN {
+    print "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
+}
+NR > 1 {
+    split($6, a, ",")
+    split(a[2], b, "=")
+    pid_program = b[2]
+    printf "%-4s  %-6s %-10s %-12s %-13s %-8s  %s  %s\n", $1, $2, $3, $4, $5, $6, pid_program, $7
 }'
 
