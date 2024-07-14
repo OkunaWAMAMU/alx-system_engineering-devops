@@ -1,18 +1,27 @@
 #!/usr/bin/env bash
 # This script displays listening ports along with the PID and name of the program to which each socket belongs
 
-echo "Active Internet connections (only servers)"
-echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
+# Function to display active internet connections
+display_internet_connections() {
+  echo "Active Internet connections (only servers)"
+  echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
+  
+  # Display TCP listening sockets
+  ss -tlnp | awk 'NR>1 {print $1, $2, $3, $4, $5, $6, $7, $8}'
+  
+  # Display UDP listening sockets
+  ss -lunp | awk 'NR>1 {print $1, $2, $3, $4, $5, $6, $7, $8}'
+}
 
-# Display TCP listening sockets
-ss -tlnp | awk 'NR==1 || /LISTEN/ {print}'
+# Function to display active UNIX domain sockets
+display_unix_sockets() {
+  echo "Active UNIX domain sockets (only servers)"
+  echo "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
+  
+  # Display UNIX domain sockets
+  ss -lxunp | awk 'NR>1 {print $1, $2, $3, $4, $5, $6, $7, $8, $9, $10}'
+}
 
-# Display UDP listening sockets
-ss -lunp | awk 'NR==1 || /UNCONN/ {print}'
-
-echo "Active UNIX domain sockets (only servers)"
-echo "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
-
-# Display UNIX domain sockets
-ss -lxunp | awk 'NR==1 || /LISTEN|UNCONN/ {print}'
-
+# Execute the functions
+display_internet_connections
+display_unix_sockets
