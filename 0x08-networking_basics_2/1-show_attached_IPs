@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# This script displays all active IPv4 IPs on the machine
+# This script displays all active IPv4 IPs on the machine it's executed on
 
-# Get all active IPv4 IPs using the ip command and filter with grep and awk
-ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+# Use the ip command to list all IP addresses, grep for lines containing "inet" and exclude the ones with "inet6"
+# Then use awk to extract the IP addresses
+ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | sort | uniq
 
