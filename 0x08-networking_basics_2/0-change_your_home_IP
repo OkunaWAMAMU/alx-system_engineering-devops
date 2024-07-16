@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# This script configures the /etc/hosts file to resolve localhost to 127.0.0.2 and facebook.com to 8.8.8.8
+
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit 1
+fi
+
+# Copy the /etc/hosts file to a temporary location
+cp /etc/hosts ~/hosts.new
+
+# Add or update the entries in ~/hosts.new
+{
+  # Remove existing entries for localhost and facebook.com
+  sed -i '/127.0.0.2 localhost/d' ~/hosts.new
+  sed -i '/::1 localhost/d' ~/hosts.new
+  sed -i '/8.8.8.8 facebook.com/d' ~/hosts.new
+
+  # Append new entries
+  echo "127.0.0.2 localhost" >> ~/hosts.new
+  echo "8.8.8.8 facebook.com" >> ~/hosts.new
+} &>/dev/null
+
+# Replace the original /etc/hosts file with the modified one
+cp -f ~/hosts.new /etc/hosts
+
+# Remove the temporary file
+rm ~/hosts.new
