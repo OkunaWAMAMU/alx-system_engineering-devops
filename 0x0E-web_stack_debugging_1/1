@@ -1,0 +1,10 @@
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+    %%  TToottaall        %%  RReecceeiivveedd  %%  XXffeerrdd    AAvveerraaggee  SSppeeeedd      TTiimmee        TTiimmee        Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0    00  1100770011        00          00    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+    0     0      0      0 --:--:-- --:--:-- --:--:--     0
